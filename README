@@ -1,0 +1,9 @@
+This a daemon spawns a process and reaps all orphaned
+grandchildren. This is useful if you want to keep
+your process tree clean. For instance if you want
+all programs started from inside the same display
+server instance to appear to be inside that display
+if you look inside the process tree, rather than all
+processes that loses their parent being reparented
+to PID 1 and make a mess on your process tree.
+
