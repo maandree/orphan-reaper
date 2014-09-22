@@ -8,10 +8,14 @@
 PREFIX ?= /usr
 # The binary path excluding prefix.
 BIN ?= /bin
+# The library binary path excluding prefix.
+LIBEXEC ?= /libexec
 # The resource path excluding prefix.
 DATA ?= /share
 # The binary path including prefix.
 BINDIR ?= $(PREFIX)$(BIN)
+# The library binary path including prefix.
+LIBEXECDIR ?= $(PREFIX)$(LIBEXEC)
 # The resource path including prefix.
 DATADIR ?= $(PREFIX)$(DATA)
 # The license base path including prefix.
@@ -22,19 +26,27 @@ LICENSEDIR ?= $(DATADIR)/licenses
 PKGNAME ?= orphan-reaper
 
 # The name of the command as it should be installed.
-COMMAND ?= reapd
+COMMAND ?= orphan-reaper
+
+
+# Flags to compile with.
+USER_FLAGS = $(CFLAGS) $(LDFLAGS) $(CPPFLAGS)
+WARN = -Wall -Wextra -pedantic
+OPTIMISE = -O3
+DEFS = -D'LIBEXECDIR="$(LIBEXECDIR)"'
+C_FLAGS = $(OPTIMISE) $(WARN) $(DEFS) $(USER_FLAGS)
 
 
 
 # Build rules.
 
 .PHONY: all
-all: bin/reapd
+all: bin/orphan-reaper bin/reapd
 
 
-bin/reapd: src/reapd.c
+bin/%: src/%.c
 	mkdir -p bin
-	$(CC) -O3 -Wall -Wextra -pedantic $(CFLAGS) $(LDFLAGS) $(CPPFLAGS) -o $@ $<
+	$(CC) $(C_FLAGS) -o $@ $<
 
 
 # Install rules.
@@ -50,9 +62,11 @@ install-base: install-cmd install-copyright
 
 
 .PHONY: install-cmd
-install-cmd: bin/reapd
+install-cmd: bin/orphan-reaper bin/reapd
 	install -dm755 -- "$(DESTDIR)$(BINDIR)"
-	install -m755 $< -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	install -dm755 -- "$(DESTDIR)$(LIBEXECDIR)"
+	install -m755 bin/orphan-reaper -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	install -m755 bin/reapd -- "$(DESTDIR)$(LIBEXECDIR)/reapd"
 
 
 .PHONY: install-copyright
@@ -75,6 +89,7 @@ install-license:
 .PHONY: uninstall
 uninstall:
 	-rm -- "$(DESTDIR)$(BINDIR)/$(COMMAND)"
+	-rm -- "$(DESTDIR)$(LIBEXECDIR)/reapd"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/COPYING"
 	-rm -- "$(DESTDIR)$(LICENSEDIR)/$(PKGNAME)/LICENSE"
 
