@@ -9,6 +9,7 @@ url="https://github.com/maandree/orphan-reaper"
 license=('GPL3')
 depends=(glibc 'linux>=3.4')
 makedepends=(glibc gcc make coreutils texinfo auto-auto-complete)
+install=orphan-reaper.install
 source=($url/archive/$pkgver.tar.gz)
 sha256sums=(bd03e7d103f865744818e7cbf14075ade2922e7610f53686323efe2fa40e72dd)
 
