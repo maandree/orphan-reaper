@@ -1,0 +1,11 @@
+(orphan-reaper
+	(default (arg COMMAND) (files -r) (suggest cmd)
+		 (desc 'Specify which command to run'))
+	
+	(unargumented (options --fatal)
+		      (complete --fatal)
+		      (desc 'Fail if a subreaper cannot be created'))
+	
+	(suggestion cmd (verbatim COMMAND))
+)
+

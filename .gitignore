@@ -12,4 +12,8 @@ obj/
 *.out
 *.gch
 *.su
+*.pdf
+*.ps
+*.dvi
+*.info
 
