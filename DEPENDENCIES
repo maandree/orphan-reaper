@@ -8,6 +8,9 @@ BUILD DEPENDENCIES:
 	libc
 	cc
 	make
+	texinfo (opt-out, for manuals)
+	texlive-core (opt-in, for pdf, ps and dvi manuals)
+	auto-auto-complete (opt-out, for shell tab-completion)
 
 INSTALL DEPENDENCIES:
 
