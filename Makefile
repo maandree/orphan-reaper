@@ -220,5 +220,5 @@ uninstall:
 
 .PHONY: clean
 clean:
-	-rm -rf obj bin
+	-rm -rf obj bin orphan-reaper.info orphan-reaper.pdf orphan-reaper.ps orphan-reaper.dvi
 
