@@ -1,6 +1,6 @@
 _/
-bin/
-obj/
+/bin/
+/obj/
 .*
 !.git*
 *~
