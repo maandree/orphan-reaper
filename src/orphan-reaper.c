@@ -28,7 +28,7 @@ static void usage(void)
   printf("USAGE: orphan-reaper [--fatal] [--] <command...>\n");
   printf("\n");
   printf("Unless `--fatal` is used, the program will run <command>\n");
-  printf("even if the process cound not be marked as a child subreaper.\n");
+  printf("even if the process could not be marked as a child subreaper.\n");
   printf("\n");
 }
 
