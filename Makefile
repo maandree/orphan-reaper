@@ -5,31 +5,35 @@
 
 
 # The package path prefix, if you want to install to another root, set DESTDIR to that root.
-PREFIX ?= /usr
+PREFIX = /usr
 # The binary path excluding prefix.
-BIN ?= /bin
+BIN = /bin
 # The library binary path excluding prefix.
-LIBEXEC ?= /libexec
+LIBEXEC = /libexec
 # The resource path excluding prefix.
-DATA ?= /share
+DATA = /share
 # The binary path including prefix.
-BINDIR ?= $(PREFIX)$(BIN)
+BINDIR = $(PREFIX)$(BIN)
 # The library binary path including prefix.
-LIBEXECDIR ?= $(PREFIX)$(LIBEXEC)
+LIBEXECDIR = $(PREFIX)$(LIBEXEC)
 # The resource path including prefix.
-DATADIR ?= $(PREFIX)$(DATA)
+DATADIR = $(PREFIX)$(DATA)
 # The generic documentation path including prefix
-DOCDIR ?= $(DATADIR)/doc
+DOCDIR = $(DATADIR)/doc
 # The info manual documentation path including prefix
-INFODIR ?= $(DATADIR)/info
+INFODIR = $(DATADIR)/info
+# The man page documentation path including prefix
+MANDIR = $(DATADIR)/man
+# The man page section 1 path including prefix
+MAN1DIR = $(MANDIR)/man1
 # The license base path including prefix.
-LICENSEDIR ?= $(DATADIR)/licenses
+LICENSEDIR = $(DATADIR)/licenses
 
 
 # The name of the package as it should be installed.
-PKGNAME ?= orphan-reaper
+PKGNAME = orphan-reaper
 # The name of the command as it should be installed.
-COMMAND ?= orphan-reaper
+COMMAND = orphan-reaper
 
 
 # Flags to compile with.
@@ -64,30 +68,32 @@ bin/%: src/%.c
 doc: info pdf dvi ps
 
 .PHONY: info
-info: orphan-reaper.info
-%.info: info/%.texinfo info/fdl.texinfo
+info: bin/orphan-reaper.info
+bin/%.info: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p bin
 	makeinfo $<
+	mv $*.info $@
 
 .PHONY: pdf
-pdf: orphan-reaper.pdf
-%.pdf: info/%.texinfo info/fdl.texinfo
-	@mkdir -p obj/pdf
+pdf: bin/orphan-reaper.pdf
+bin/%.pdf: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p obj/pdf bin
 	cd obj/pdf ; yes X | texi2pdf ../../$<
-	mv obj/pdf/$@ $@
+	mv obj/pdf/$*.pdf $@
 
 .PHONY: dvi
-dvi: orphan-reaper.dvi
-%.dvi: info/%.texinfo info/fdl.texinfo
-	@mkdir -p obj/dvi
+dvi: bin/orphan-reaper.dvi
+bin/%.dvi: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p obj/dvi bin
 	cd obj/dvi ; yes X | $(TEXI2DVI) ../../$<
-	mv obj/dvi/$@ $@
+	mv obj/dvi/$*.dvi $@
 
 .PHONY: ps
-ps: orphan-reaper.ps
-%.ps: info/%.texinfo info/fdl.texinfo
-	@mkdir -p obj/ps
+ps: bin/orphan-reaper.ps
+bin/%.ps: doc/info/%.texinfo doc/info/fdl.texinfo
+	@mkdir -p obj/ps bin
 	cd obj/ps ; yes X | texi2pdf --ps ../../$<
-	mv obj/ps/$@ $@
+	mv obj/ps/$*.ps $@
 
 # Build rules for shell auto-completion.
 
@@ -116,9 +122,9 @@ bin/orphan-reaper.fish: src/completion
 # Install rules.
 
 .PHONY: install
-install: install-base install-info install-shell
+install: install-base install-info install-man install-shell
 
-.PHONY: install
+.PHONY: install-all
 install-all: install-base install-doc install-shell
 
 # Install base rules.
@@ -149,27 +155,32 @@ install-license:
 # Install documentation.
 
 .PHONY: install-doc
-install-doc: install-info install-pdf install-ps install-dvi
+install-doc: install-info install-pdf install-ps install-dvi install-man
 
 .PHONY: install-info
-install-info: orphan-reaper.info
+install-info: bin/orphan-reaper.info
 	install -dm755 -- "$(DESTDIR)$(INFODIR)"
 	install -m644 $< -- "$(DESTDIR)$(INFODIR)/$(PKGNAME).info"
 
 .PHONY: install-pdf
-install-pdf: orphan-reaper.pdf
+install-pdf: bin/orphan-reaper.pdf
 	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
 	install -m644 $< -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
 
 .PHONY: install-ps
-install-ps: orphan-reaper.ps
+install-ps: bin/orphan-reaper.ps
 	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
 	install -m644 $< -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 
 .PHONY: install-dvi
-install-dvi: orphan-reaper.dvi
+install-dvi: bin/orphan-reaper.dvi
 	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
 	install -m644 $< -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+
+.PHONY: install-man
+install-man:
+	install -dm755 -- "$(DESTDIR)$(MAN1DIR)"
+	install -m644 doc/man/orphan-reaper.1 -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
 
 # Install shell auto-completion.
 
@@ -205,6 +216,7 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+	-rm -- "$(DESTDIR)$(MAN1DIR)/$(COMMAND).1"
 	-rm -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/fish/completions"
 	-rmdir -- "$(DESTDIR)$(DATADIR)/fish"
@@ -220,5 +232,5 @@ uninstall:
 
 .PHONY: clean
 clean:
-	-rm -rf obj bin orphan-reaper.info orphan-reaper.pdf orphan-reaper.ps orphan-reaper.dvi
+	-rm -rf obj bin
 
