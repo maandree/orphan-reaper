@@ -1,0 +1,43 @@
+.TH ORPHAN-REAPER 1 ORPHAN-REAPER
+.SH NAME
+orphan-reaper - Keep your process tree clean
+.SH SYNOPSIS
+.BR orphan-reaper
+[--fatal] [--]
+.IR COMMAND ...
+.SH DESCRIPTION
+This user daemon spawns a process and reaps all orphaned
+grandchildren. This is useful if you want to keep your
+process tree clean. For instance if you want all programs
+started from inside the same display server instance to
+appear to be inside that display if you look inside the
+process tree, rather than all processes that loses their
+parent being reparented to PID 1 and make a mess on your
+process tree.
+.SH OPTIONS
+.TP
+.BR \-\-fatal
+Fail if the process cannot become a subreaper.
+.SH RATIONALE
+It is really nice to have a processes that are running
+inside a display server to be a grandchild of the
+display server, rather than being reparanted to PID 1.
+Especially when multiple display servers are running.
+.SH "SEE ALSO"
+.BR prctl (2),
+.BR pstree (1),
+.BR htop (1)
+.SH AUTHORS
+Principal author, Mattias Andrée.  See the COPYING file for the full
+list of authors.
+.SH LICENSE
+Copyright \(co 2014, 2015  Mattias Andrée
+.br
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+.br
+This is free software: you are free to change and redistribute it.
+.br
+There is NO WARRANTY, to the extent permitted by law.
+.SH BUGS
+Please report bugs to https://github.com/maandree/orphan-reaper/issues or to
+maandree@member.fsf.org

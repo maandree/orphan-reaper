@@ -1,5 +1,5 @@
 NAME
-	orphan-reaper - Keep your process tree clean.
+	orphan-reaper - Keep your process tree clean
 
 SYNOPSIS
 	orphan-reaper [--fatal] [--] COMMAND...
@@ -25,5 +25,5 @@ RATIONALE
 	Especially when multiple display servers are running.
 
 SEE ALSO
-	prctl(2)
+	prctl(2), pstree(1), htop(1)
 
