@@ -1,4 +1,4 @@
-This a daemon spawns a process and reaps all orphaned
+This daemon spawns a process and reaps all orphaned
 grandchildren. This is useful if you want to keep
 your process tree clean. For instance if you want
 all programs started from inside the same display
