@@ -2,7 +2,7 @@ NAME
 	orphan-reaper - Keep your process tree clean
 
 SYNOPSIS
-	orphan-reaper [--fatal] [--] COMMAND...
+	orphan-reaper [-f] command...
 
 DESCRIPTION
 	This user daemon spawns a process and reaps all orphaned
@@ -15,7 +15,7 @@ DESCRIPTION
 	process tree.
 
 OPTIONS
-	--fatal
+	-f
 		Fail if the process cannot become a subreaper.
 
 RATIONALE
@@ -26,4 +26,3 @@ RATIONALE
 
 SEE ALSO
 	prctl(2), pstree(1), htop(1)
-
