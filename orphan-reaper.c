@@ -17,6 +17,7 @@
 # endif
 #endif
 
+
 char *argv0;
 
 static
