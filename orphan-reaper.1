@@ -11,17 +11,17 @@ grandchildren. This is useful if you want to keep your
 process tree clean. For instance if you want all programs
 started from inside the same display server instance to
 appear to be inside that display if you look inside the
-process tree, rather than all processes that loses their
-parent being reparented to PID 1 and make a mess on your
+process tree, rather than all processes that lose their
+parent being reparented to PID 1 and making a mess of your
 process tree.
 .SH OPTIONS
 .TP
 .BR \-f
 Fail if the process cannot become a subreaper.
 .SH RATIONALE
-It is really nice to have a processes that are running
-inside a display server to be a grandchild of the
-display server, rather than being reparanted to PID 1.
+It is really nice to have processes that are running
+inside a display server be grandchildren of the
+display server, rather than being reparented to PID 1.
 Especially when multiple display servers are running.
 .SH "SEE ALSO"
 .BR prctl (2),
